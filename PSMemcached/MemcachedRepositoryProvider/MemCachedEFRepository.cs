@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MemcachedRepositoryProvider.Base;
+﻿using MemcachedRepositoryProvider.Base;
 using PSMemcached.Repository;
+using PSMemcached.Repository.DatabaseInitializer;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace MemcachedRepositoryProvider
 {
-    public class MemCachedEFRepository:IMemcachedRepositoryProvider
+    public class MemCachedEFRepository : IMemcachedRepositoryProvider, IDisposable
     {
-        private MemcacheLocalContainer _container;
+        private static MemcacheLocalContainer _container;
 
         public MemCachedEFRepository()
         {
+            const string configFile = @"C:\Users\rlopez\PSMemCached\app.config";
+            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", configFile);
+            if (_container != null) return;
+            Database.SetInitializer(new DBSeeder());
             _container = new MemcacheLocalContainer();
         }
 
@@ -21,11 +25,11 @@ namespace MemcachedRepositoryProvider
         {
             return _container.Environments.Select(env => new MemcachedEnvironment()
                 {
-                    Id =env.Id,
+                    Id = env.Id,
                     Name = env.Name,
                     Servers = new List<MemcachedServer>(env.Servers.Select(serv => new MemcachedServer()
                         {
-                            Id=serv.Id,
+                            Id = serv.Id,
                             IpAddress = serv.IpAddress,
                             Name = serv.Name,
                             Port = serv.Port
@@ -33,15 +37,37 @@ namespace MemcachedRepositoryProvider
                 }).ToList();
         }
 
-        //public IList<MemcachedServer> GetServers(MemcachedEnvironment environment)
-        //{
-        //    return _container.Servers.Select(server => new MemcachedServer()
-        //        {
-        //            Id = server.Id,
-        //            IpAddress = server.IpAddress,
-        //            Name = server.Name,
-        //            Port = server.Port
-        //        }).ToList();
-        //}
+        public void SaveChanges()
+        {
+            if (_container != null)
+            {
+                _container.SaveChanges();
+            }
+        }
+
+        public void AddNewEnvironment(MemcachedEnvironment environment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNewServer(MemcachedServer server)
+        {
+            var env = _container.Environments.First(s => s.Id == server.Environment.Id);
+            env.Servers.Add(new Server()
+                {
+                    Environment = env,
+                    EnvironmentId = env.Id,
+                    IpAddress = server.IpAddress,
+                    Name = server.Name,
+                    Port = server.Port
+                });
+            SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            if (_container != null)
+                _container.Dispose();
+        }
     }
 }

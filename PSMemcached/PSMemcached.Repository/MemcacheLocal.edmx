@@ -27,7 +27,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" Nullable="false" />
     <Property Name="IpAddress" Type="nvarchar" Nullable="false" />
-    <Property Name="Port" Type="nvarchar" Nullable="false" />
+    <Property Name="Port" Type="int" Nullable="false" />
     <Property Name="EnvironmentId" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="EnvironmentServer">
@@ -69,7 +69,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" />
           <Property Type="String" Name="IpAddress" Nullable="false" />
-          <Property Type="String" Name="Port" Nullable="false" />
+          <Property Type="Int32" Name="Port" Nullable="false" />
           <Property Type="Int32" Name="EnvironmentId" Nullable="false" />
           <NavigationProperty Name="Environment" Relationship="MemcacheLocal.EnvironmentServer" FromRole="Server" ToRole="Environment" />
         </EntityType>

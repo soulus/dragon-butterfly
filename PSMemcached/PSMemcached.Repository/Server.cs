@@ -17,7 +17,7 @@ namespace PSMemcached.Repository
         public int Id { get; set; }
         public string Name { get; set; }
         public string IpAddress { get; set; }
-        public string Port { get; set; }
+        public int Port { get; set; }
         public int EnvironmentId { get; set; }
     
         public virtual Environment Environment { get; set; }

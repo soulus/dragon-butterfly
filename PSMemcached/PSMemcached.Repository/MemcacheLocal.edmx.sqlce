@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 11/07/2013 17:19:12
+-- Date Created: 11/08/2013 13:21:19
 -- Generated from EDMX file: C:\Users\rlopez\Documents\Visual Studio 2012\Projects\PSMemcached\PSMemcached.Repository\MemcacheLocal.edmx
 -- --------------------------------------------------
 
@@ -12,12 +12,18 @@
 -- NOTE: if the constraint does not exist, an ignorable error will be reported.
 -- --------------------------------------------------
 
+    ALTER TABLE [Servers] DROP CONSTRAINT [FK_EnvironmentServer];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- NOTE: if the table does not exist, an ignorable error will be reported.
 -- --------------------------------------------------
 
+    DROP TABLE [Environments];
+GO
+    DROP TABLE [Servers];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -35,7 +41,7 @@ CREATE TABLE [Servers] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(4000)  NOT NULL,
     [IpAddress] nvarchar(4000)  NOT NULL,
-    [Port] nvarchar(4000)  NOT NULL,
+    [Port] int  NOT NULL,
     [EnvironmentId] int  NOT NULL
 );
 GO

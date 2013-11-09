@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseInitializer\DBSeeder.cs" />
     <Compile Include="Environment.cs">
       <DependentUpon>MemcacheLocal.tt</DependentUpon>
     </Compile>
